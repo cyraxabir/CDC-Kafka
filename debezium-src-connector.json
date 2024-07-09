@@ -1,0 +1,29 @@
+curl -X POST -H "Content-Type: application/json" --data '{
+    "name": "source_debizium",
+    "config": {
+		"connector.class": "io.debezium.connector.mysql.MySqlConnector",
+        "tasks.max": "1",
+        "database.hostname": "db_ip",
+        "database.port": "3306",
+        "database.user": "__user__",
+        "database.password": "***",
+        "database.server.name": "_name a connector__",
+        "database.include.list": "__table name for cdc__",
+				"table.include.list": "__name__",
+        "database.history.kafka.bootstrap.servers": "___docker machine ip___:9092",
+        "database.history.kafka.topic": "schema-changes.ML",
+				"quote.identifiers": "true",
+        "topic.prefix": "ml",
+				"database.server.id": "1",
+				"snapshot.mode": "initial",
+				"snapshot.locking.mode": "none",
+        "schema.history.internal.kafka.bootstrap.servers": "___docker machine ip___:9092",
+        "schema.history.internal.kafka.topic": "internal-schema-history-topic",
+				"transforms": "route",
+				"include.schema.changes": "true",
+				"include.key": "true",
+        "transforms.route.type": "org.apache.kafka.connect.transforms.RegexRouter",
+        "transforms.route.regex": "([^.]+)\\.([^.]+)\\.([^.]+)",
+        "transforms.route.replacement": "$1_$3"
+    }
+}' http://___docker machine ip___:8083/connectors
